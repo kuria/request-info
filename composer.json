@@ -1,0 +1,26 @@
+{
+    "name": "kuria/request-info",
+    "description": "Get information about the current HTTP request",
+    "keywords": ["http", "request", "headers", "https", "ip", "scheme", "method", "host", "port", "url", "base-dir", "base-path", "path-info", "trusted-proxy", "forwarded", "x-forwarded", "rfc-7239"],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1",
+        "ext-ctype": "*",
+        "ext-filter": "*",
+        "kuria/url": "^4.0"
+    },
+    "require-dev": {
+        "kuria/dev-meta": "^0.6",
+        "php-mock/php-mock-phpunit": "^2.1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kuria\\RequestInfo\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kuria\\RequestInfo\\": "tests"
+        }
+    }
+}
