@@ -5,7 +5,6 @@
     "license": "MIT",
     "require": {
         "php": ">=7.1",
-        "ext-ctype": "*",
         "ext-filter": "*",
         "kuria/url": "^4.0"
     },

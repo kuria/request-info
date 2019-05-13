@@ -136,7 +136,7 @@ class TrustedProxies
                 $value = trim($value);
 
                 if ($prop === 'port') {
-                    if (ctype_digit($value)) {
+                    if (preg_match('{\d++$}AD', $value)) {
                         $xHeaderValues[] = (int) $value;
                     }
                 } else {

@@ -317,12 +317,51 @@ class RequestInfoTest extends Test
         ];
     }
 
-    function testShouldOverrideMethodIfAllowed()
+    /**
+     * @dataProvider provideServerValuesForMethodOverride
+     */
+    function testShouldOverrideMethodIfAllowed(array $serverValues, string $expectedMethod)
     {
-        $this->prepare(['REQUEST_METHOD' => 'POST', 'HTTP_X_HTTP_METHOD_OVERRIDE' => 'put']);
+        $this->prepare(['REQUEST_METHOD' => 'POST'] + $serverValues);
         RequestInfo::setAllowHttpMethodOverride(true);
 
-        $this->assertCachedMethodCall('PUT', 'getMethod');
+        $this->assertCachedMethodCall($expectedMethod, 'getMethod');
+    }
+
+    function provideServerValuesForMethodOverride()
+    {
+        return [
+            // serverValues, expectedMethod
+            'no override' => [
+                [],
+                'POST',
+            ],
+
+            'override' => [
+                ['HTTP_X_HTTP_METHOD_OVERRIDE' => 'put'],
+                'PUT',
+            ],
+
+            'custom override' => [
+                ['HTTP_X_HTTP_METHOD_OVERRIDE' => 'CuStOm'],
+                'CUSTOM',
+            ],
+
+            'blank override' => [
+                ['HTTP_X_HTTP_METHOD_OVERRIDE' => ''],
+                'POST',
+            ],
+
+            'invalid override' => [
+                ['HTTP_X_HTTP_METHOD_OVERRIDE' => '-+@#$~^&*{}'],
+                'POST',
+            ],
+
+            'invalid override 2' => [
+                ['HTTP_X_HTTP_METHOD_OVERRIDE' => 'CUSTOM_FOO'],
+                'POST',
+            ],
+        ];
     }
 
     /**

@@ -86,7 +86,7 @@ abstract class Parser
     {
         if (
             ($colonPos = strpos($host, ':')) !== false
-            && ctype_digit($port = substr($host, $colonPos + 1))
+            && preg_match('{\d++$}AD', $port = substr($host, $colonPos + 1))
         ) {
             return [
                 'host' => substr($host, 0, $colonPos),

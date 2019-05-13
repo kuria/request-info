@@ -319,12 +319,13 @@ abstract class RequestInfo
     {
         $method = strtoupper(Server::get('REQUEST_METHOD') ?? 'GET');
 
-        if ($method === 'POST' && self::$allowHttpMethodOverride) {
-            $headers = static::getHeaders();
-
-            if (isset($headers['x-http-method-override'])) {
-                $method = strtoupper($headers['x-http-method-override']);
-            }
+        if (
+            $method === 'POST'
+            && self::$allowHttpMethodOverride
+            && ($methodOverride = static::getHeaders()['x-http-method-override'] ?? null) !== null
+            && preg_match('{[A-Za-z]++$}AD', $methodOverride)
+        ) {
+            $method = strtoupper($methodOverride);
         }
 
         return $method;
