@@ -4,6 +4,7 @@ Changelog
 1.0.1
 *****
 
+- updated kuria/url dependency
 - removed dependency on the ctype extension
 - only ASCII letters are allowed in ``X-HTTP-Method-Override``
 

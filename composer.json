@@ -6,7 +6,7 @@
     "require": {
         "php": ">=7.1",
         "ext-filter": "*",
-        "kuria/url": "^4.0"
+        "kuria/url": "^5.0"
     },
     "require-dev": {
         "kuria/dev-meta": "^0.6",
