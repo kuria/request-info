@@ -334,7 +334,13 @@ abstract class RequestInfo
     private static function determineHost(): string
     {
         // get current host without port
-        $host = Parser::parseHostAndPort(self::getRawHost())['host'];
+        $host = self::getRawHost();
+
+        if ($host !== null) {
+            $host = Parser::parseHostAndPort($host)['host'];
+        } else {
+            $host = 'localhost';
+        }
 
         // validate
         if (filter_var($host, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) === false) {
@@ -348,15 +354,19 @@ abstract class RequestInfo
         return $host;
     }
 
-    private static function getRawHost(): string
+    private static function getRawHost(): ?string
     {
-        return (string) (
-            (static::isFromTrustedProxy() ? (self::getForwardedPropValues('host')[0] ?? null) : null)
+        $host = (static::isFromTrustedProxy() ? (self::getForwardedPropValues('host')[0] ?? null) : null)
             ?? static::getHeaders()['host']
             ?? Server::get('SERVER_NAME')
             ?? Server::get('SERVER_ADDR')
-            ?? 'localhost'
-        );
+            ?? null;
+
+        if ($host !== null) {
+            return (string) $host;
+        }
+
+        return null;
     }
 
     private static function isTrustedHost(string $host): bool
@@ -386,8 +396,8 @@ abstract class RequestInfo
     {
         if (static::isFromTrustedProxy() && ($ports = self::getForwardedPropValues('port'))) {
             $port = $ports[0];
-        } elseif ($hostPort = Parser::parseHostAndPort(self::getRawHost())['port']) {
-            $port = $hostPort;
+        } elseif (($host = self::getRawHost()) !== null) {
+            $port = Parser::parseHostAndPort($host)['port'];
         } elseif ($serverPort = Server::get('SERVER_PORT')) {
             $port = (int) $serverPort;
         }

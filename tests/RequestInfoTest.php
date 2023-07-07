@@ -516,6 +516,8 @@ class RequestInfoTest extends Test
             'from server name' => [['SERVER_NAME' => 'bar:9090'], 9090],
             'from server addr' => [['SERVER_ADDR' => '10.20.30.40:1010'], 1010],
             'from server port' => [['SERVER_PORT' => '2020'], 2020],
+            'fallback with known host' => [['SERVER_PORT' => 123, 'SERVER_NAME' => 'baz'], 80],
+            'secure fallback with known host' => [['SERVER_PORT' => 123, 'SERVER_NAME' => 'baz', 'HTTPS' => 'on'], 443],
             'fallback' => [[], 80],
             'secure fallback' => [['HTTPS' => 'on'], 443],
             'untrusted forwarded' => [['HTTP_FORWARDED' => 'host=foo:8080'], 80],
