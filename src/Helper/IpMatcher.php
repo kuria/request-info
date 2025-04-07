@@ -71,7 +71,13 @@ abstract class IpMatcher
      */
     static function matchIp6($requestIp, $ip): bool
     {
-        if (!((extension_loaded('sockets') && defined('AF_INET6')) || @inet_pton('::1'))) {
+        static $ipv6Support;
+
+        if ($ipv6Support === null) {
+            $ipv6Support = (extension_loaded('sockets') && defined('AF_INET6')) || @inet_pton('::1');
+        }
+
+        if (!$ipv6Support) {
             throw new UnsupportedOperationException('Missing IPv6 support (no sockets extension or PHP was compiled with --disable-ipv6)');
         }
 

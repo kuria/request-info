@@ -1,6 +1,12 @@
 Changelog
 #########
 
+1.0.3
+*****
+
+- fix IPv6 handling in client IP normalization
+
+
 1.0.2
 *****
 

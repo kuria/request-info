@@ -550,7 +550,7 @@ abstract class RequestInfo
     {
         $filteredClientIps = [];
 
-        foreach ($clientIps as $key => $clientIp) {
+        foreach ($clientIps as $clientIp) {
             $clientIp = self::normalizeClientIp($clientIp);
 
             if (
@@ -569,8 +569,14 @@ abstract class RequestInfo
 
     private static function normalizeClientIp(string $clientIp): string
     {
-        // remove port
-        if (($lastColonPos = strrpos($clientIp, ':')) !== false) {
+        // remove port (non-standard)
+        if (
+            ($lastColonPos = strrpos($clientIp, ':')) !== false
+            && (
+                strpos($clientIp, ':') === $lastColonPos // IPv4
+                || substr($clientIp, $lastColonPos - 1, 1) === ']' // IPv6 requires brackets
+            )
+        ) {
             $clientIp = substr($clientIp, 0, $lastColonPos);
         }
 

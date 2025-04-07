@@ -270,8 +270,8 @@ class RequestInfoTest extends Test
             ],
 
             'forwarded' => [
-                ['HTTP_FORWARDED' => 'for=20.30.40.50, for=[2001:db8::1]:80, for=invalid, for=2.3.4.5'],
-                ['2.3.4.5', '2001:db8::1'],
+                ['HTTP_FORWARDED' => 'for=20.30.40.50, for=[2001:db8::1]:80, for=invalid, for=2002:7f00:1::2, for=2.3.4.5'],
+                ['2.3.4.5', '2002:7f00:1::2', '2001:db8::1'],
             ],
 
             'x-forwarded' => [

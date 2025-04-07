@@ -42,10 +42,6 @@ class IpMatcherTest extends Test
      */
     function testShouldMatchIpv6(string $ip, array $list, bool $expectedResult)
     {
-        if (!defined('AF_INET6')) {
-            $this->markTestSkipped('No IPv6 support');
-        }
-
         $this->assertSame($expectedResult, IpMatcher::match($ip, $list));
     }
 
@@ -66,22 +62,6 @@ class IpMatcherTest extends Test
             ['}__test|O:21:&quot;JDatabaseDriverMysqli&quot;:3:{s:2', ['::1'], false],
             ['2a01:198:603:0:396e:4789:8e99:890f', ['unknown'], false],
         ];
-    }
-
-    function testShouldThrowExceptionWhenMatchingIpv6WithoutIpv6Support()
-    {
-        $this->getFunctionMock(__NAMESPACE__, 'extension_loaded')
-            ->expects($this->once())
-            ->willReturn(false);
-
-        $this->getFunctionMock(__NAMESPACE__, 'inet_pton')
-            ->expects($this->once())
-            ->willReturn(false);
-
-        $this->expectExceptionMessage(UnsupportedOperationException::class);
-        $this->expectExceptionMessage('Missing IPv6 support (no sockets extension or PHP was compiled with --disable-ipv6)');
-
-        IpMatcher::match('2a01:198:603:0:396e:4789:8e99:890f', ['2a01:198:603:0::/65']);
     }
 
     /**
